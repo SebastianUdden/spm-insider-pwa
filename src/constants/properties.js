@@ -1,4 +1,7 @@
+export const NAME = "Person i ledande ställning"
+export const TITLE = "Befattning"
 export const PRICE = "Pris"
+export const INSTRUMENT = "Instrumentnamn"
 export const VOLUME = "Volym"
 export const TYPE = "Karaktär"
 export const DATE_OF_PUBLICATION = "Publiceringsdatum"

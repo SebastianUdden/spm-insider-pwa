@@ -3,7 +3,15 @@ import styled from "styled-components"
 import Graph from "../graph/Graph"
 import { colors } from "../../constants/colors"
 import { MOCK_DATA } from "../../constants/mock-data"
-import { TYPE, DATE_OF_PUBLICATION } from "../../constants/properties.js"
+import {
+  TYPE,
+  DATE_OF_PUBLICATION,
+  NAME,
+  TITLE,
+  INSTRUMENT,
+  VOLUME,
+  PRICE,
+} from "../../constants/properties.js"
 import { BUY, SELL } from "../../constants/values.js"
 import netLongShortParser from "./netLongShortParser"
 import { groupBy, getTotalPrice, getSum, getDateList } from "../common/utils"
@@ -19,7 +27,7 @@ const Input = styled.input`
   background-color: ${colors.brightGrey};
   color: ${colors.white};
   width: 100%;
-  border: 1px solid #aaa;
+  border: 1px solid ${colors.darkestWhite};
   border-radius: 0.3rem;
 `
 const Select = styled.select`
@@ -33,9 +41,33 @@ const Select = styled.select`
 `
 const Option = styled.option``
 const Header = styled.h2``
+const BuySell = styled.div`
+  border: 1px solid ${colors.darkestWhite};
+  padding: 0.5rem 2rem;
+`
+const Info = styled.p`
+  color: ${colors.darkestWhite};
+  font-size: larger;
+  margin: 0.1rem;
+`
+const Value = styled.span`
+  color: orange;
+`
+
+const getPriceSum = value =>
+  (Number(value[PRICE].replace(",", ".")) * Number(value[VOLUME])).toFixed(0)
+const sortOnMarketValue = (a, b) => {
+  let comparison = 0
+  if (getPriceSum(a) > getPriceSum(b)) {
+    comparison = -1
+  } else if (getPriceSum(a) < getPriceSum(b)) {
+    comparison = 1
+  }
+  return comparison
+}
 
 const NetLongShort = () => {
-  const [limit, setLimit] = useState(10000)
+  const [limit, setLimit] = useState(1000000)
   const [companies, setCompanies] = useState([])
   const [companyDateList, setCompanyDateList] = useState([])
   const [companyXY, setCompanyXY] = useState([])
@@ -132,6 +164,75 @@ const NetLongShort = () => {
         minValue={-limit}
         maxValue={limit}
       />{" "}
+      <Wrapper>
+        {/* <p>
+          {selectedCompany &&
+            JSON.stringify(selectedCompany[Object.keys(selectedCompany)[0]])}
+        </p> */}
+        {/* <p>
+          {selectedCompanyPoint &&
+          selectedCompany &&
+          selectedCompany[Object.keys(selectedCompany)[0]] === 0
+            ? "Not found"
+            : JSON.stringify(
+                Object.keys(selectedCompany[Object.keys(selectedCompany)[0]])
+              )}
+        </p> */}
+        {/* <p>{companyXY && JSON.stringify(companyXY)}</p>
+        <p>{selectedCompanyPoint && JSON.stringify(selectedCompanyPoint)}</p> */}
+        {selectedCompanyPoint &&
+          selectedCompany &&
+          selectedCompany[Object.keys(selectedCompany)[0]] &&
+          Object.keys(selectedCompany[Object.keys(selectedCompany)[0]]).map(
+            point => (
+              <>
+                {selectedCompany[Object.keys(selectedCompany)[0]][point]
+                  .sort(sortOnMarketValue)
+                  .map(trade => (
+                    <>
+                      {companyXY[selectedCompanyPoint] &&
+                        trade[DATE_OF_PUBLICATION] ===
+                          companyXY[selectedCompanyPoint].x && (
+                          <BuySell>
+                            <Info>
+                              Datum: <Value>{trade[DATE_OF_PUBLICATION]}</Value>
+                            </Info>
+                            <Info>
+                              Namn: <Value>{trade[NAME]}</Value>
+                            </Info>
+                            <Info>
+                              Befattning: <Value>{trade[TITLE]}</Value>
+                            </Info>
+                            <Info>
+                              Typ: <Value>{trade[TYPE]}</Value>
+                            </Info>
+                            <Info>
+                              Instrumentnamn: <Value>{trade[INSTRUMENT]}</Value>
+                            </Info>
+                            <Info>
+                              Volym: <Value>{trade[VOLUME]}</Value>
+                            </Info>
+                            <Info>
+                              Pris: <Value>{trade[PRICE]} SEK</Value>
+                            </Info>
+                            <Info>
+                              Marknadsvärde (volym x pris):{" "}
+                              <Value>
+                                {(
+                                  Number(trade[PRICE].replace(",", ".")) *
+                                  Number(trade[VOLUME])
+                                ).toFixed(0)}{" "}
+                                SEK
+                              </Value>
+                            </Info>
+                          </BuySell>
+                        )}
+                    </>
+                  ))}
+              </>
+            )
+          )}
+      </Wrapper>
     </Wrapper>
   )
 }
