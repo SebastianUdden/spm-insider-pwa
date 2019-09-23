@@ -1,0 +1,5 @@
+export const PRICE = "Pris"
+export const VOLUME = "Volym"
+export const TYPE = "Karaktär"
+export const DATE_OF_PUBLICATION = "Publiceringsdatum"
+export const COMPANY = "Utgivare"
