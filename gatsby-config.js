@@ -2,7 +2,7 @@ module.exports = {
   siteMetadata: {
     title: `SPM Insider`,
     description: `Tool that handles visualization of trades.`,
-    author: `@sebastianudden`,
+    author: `@SebastianUdden`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -19,7 +19,7 @@ module.exports = {
       resolve: `gatsby-plugin-manifest`,
       options: {
         name: `SPM Insider`,
-        short_name: `SPM - I`,
+        short_name: `SPM Insider`,
         start_url: `/`,
         background_color: `#444`,
         theme_color: `#222`,
