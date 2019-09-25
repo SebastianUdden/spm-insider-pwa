@@ -1,4 +1,10 @@
-import { PRICE, VOLUME, TYPE } from "../../constants/properties.js"
+import {
+  PRICE,
+  VOLUME,
+  VOLUME_UNIT,
+  TYPE,
+  CURRENCY,
+} from "../../constants/properties.js"
 import { SELL } from "../../constants/values.js"
 
 export const groupBy = (arr, property) => {
@@ -11,18 +17,23 @@ export const groupBy = (arr, property) => {
   }, {})
 }
 
-export const getTotalPrice = list =>
-  list.map(x =>
-    x[TYPE].toLowerCase().includes(SELL)
-      ? -(
-          parseFloat(x[PRICE].replace(",", ".")) *
-          parseFloat(x[VOLUME].replace(",", "."))
-        )
-      : parseFloat(x[PRICE].replace(",", ".")) *
-        parseFloat(x[VOLUME].replace(",", "."))
+export const getPriceSum = value =>
+  value[VOLUME_UNIT].toLowerCase() === "belopp"
+    ? Number(value[VOLUME])
+    : Number(value[PRICE].replace(",", ".")) * Number(value[VOLUME])
+
+export const getTotalPrice = (list, exchangeRates) =>
+  list.map(
+    x =>
+      (x[TYPE].toLowerCase().includes(SELL)
+        ? -getPriceSum(x)
+        : getPriceSum(x)) / exchangeRates[x[CURRENCY]]
   )
 
 export const getSum = list => list.reduce((a, b) => a + b, 0).toFixed(2)
+
+export const getTotalSum = (list, exchangeRates) =>
+  getSum(getTotalPrice(list, exchangeRates))
 
 export const numberWithSpaces = x => {
   var parts = x.toString().split(".")
@@ -30,10 +41,10 @@ export const numberWithSpaces = x => {
   return parts.join(".")
 }
 
-export const getDateList = dateLists =>
+export const getDateList = (dateLists, exchangeRates) =>
   Object.keys(dateLists)
     .map(date => ({
       x: date,
-      y: parseFloat(getSum(getTotalPrice(dateLists[date]))),
+      y: parseFloat(getSum(getTotalPrice(dateLists[date], exchangeRates))),
     }))
     .reverse()

@@ -217,7 +217,7 @@ const Graph = ({
                     x={positionsXY[i].split(",")[0] - maxWidth * 0.04}
                     y={maxHeight * 0.05}
                   >
-                    {numberWithSpaces(p)}
+                    {numberWithSpaces(p.toFixed(0))}
                   </Text>
                   <Line
                     interactive

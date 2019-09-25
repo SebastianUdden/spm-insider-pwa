@@ -181,3 +181,19 @@ export const MOCK_DATA = [
     Handelsplats: "A place of trade",
   },
 ]
+
+export const MOCK_COMPANY_AGGREGATE = [
+  { name: "Volvo AB", marketValue: 21000000 },
+  { name: "Scania AB", marketValue: 11000000 },
+  { name: "ABB AB", marketValue: 4000000 },
+  { name: "Investor AB", marketValue: 2000000 },
+  { name: "Kinnevik AB", marketValue: 1500000 },
+]
+
+export const MOCK_COMPANY_AGGREGATE_2 = [
+  { name: "Volvo AB", marketValue: -4000000 },
+  { name: "Scania AB", marketValue: -3500000 },
+  { name: "ABB AB", marketValue: -2000000 },
+  { name: "Investor AB", marketValue: -1000000 },
+  { name: "Kinnevik AB", marketValue: -500000 },
+]
